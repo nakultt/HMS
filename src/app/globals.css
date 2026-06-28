@@ -84,7 +84,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-[#F9F5F2] text-black font-sans;
+    @apply bg-[#E5E6D8] text-black font-sans;
     min-height: 100vh;
   }
   html {

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { connectDB } from "@/lib/db";
 import { Hackathon } from "@/lib/models/hackathon";
+import { Team } from "@/lib/models/team";
 
 export async function getHackathons() {
   await connectDB();
@@ -37,4 +38,14 @@ export async function getUniqueLocations() {
   await connectDB();
   const locations = await Hackathon.distinct("location");
   return locations;
+}
+
+export async function deleteHackathon(id: string) {
+  await connectDB();
+  await Team.deleteMany({ hackathonId: id });
+  const hackathon = await Hackathon.findByIdAndDelete(id);
+  if (!hackathon) throw new Error("Hackathon not found");
+  
+  revalidatePath("/");
+  return { success: true };
 }

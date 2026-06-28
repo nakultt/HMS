@@ -12,7 +12,8 @@ import {
   FolderDot,
   Clock,
   Plus,
-  Edit2
+  Edit2,
+  Zap
 } from "lucide-react";
 import { SubmissionForm } from "./submission-form";
 
@@ -68,15 +69,16 @@ export function HackathonDetailClient({
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8">
-      {/* Back Link */}
+      {/* Top Bar with Logo & Back Link */}
       <motion.div
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10"
       >
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-sm font-bold text-black border-2 border-black bg-white px-3 py-1.5 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all mb-6 group"
+          className="inline-flex items-center gap-2 text-sm font-bold text-black border-2 border-black bg-white px-4 py-2 rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all group w-fit"
         >
           <ArrowLeft className="size-4" />
           Back to Dashboard
@@ -98,9 +100,18 @@ export function HackathonDetailClient({
                 Event Detail
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-black leading-[1.1] mb-3">
-              {hackathon.name}
-            </h1>
+            <div className="flex items-center gap-4 mb-3">
+              <motion.div 
+                whileHover={{ rotate: 15, scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="flex items-center justify-center size-12 bg-[#FFE600] border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] shrink-0 cursor-pointer"
+              >
+                <Zap className="size-6 text-black" strokeWidth={3} />
+              </motion.div>
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-black leading-[1.1]">
+                {hackathon.name}
+              </h1>
+            </div>
             <div className="flex flex-wrap items-center gap-3 text-sm font-bold text-black">
               <span className="flex items-center gap-1.5">
                 <MapPin className="size-4" />

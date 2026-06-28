@@ -13,8 +13,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Zap, Rocket, MapPin, CalendarClock, Trophy, ArrowRight, Plus, Edit2 } from "lucide-react";
+import { Zap, Rocket, MapPin, CalendarClock, Trophy, ArrowRight, Plus, Edit2, Trash2 } from "lucide-react";
 import { HackathonForm } from "./hackathon-form";
+import { deleteHackathon } from "@/app/actions/hackathon";
 
 interface Hackathon {
   _id: string;
@@ -59,6 +60,17 @@ export function DashboardClient({
     setIsFormOpen(true);
   };
 
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this hackathon? This will also delete any associated submissions.")) {
+      try {
+        await deleteHackathon(id);
+      } catch (error) {
+        console.error("Failed to delete hackathon:", error);
+        alert("Failed to delete hackathon");
+      }
+    }
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
       {/* Header */}
@@ -70,19 +82,15 @@ export function DashboardClient({
       >
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
           <div>
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="flex items-center gap-2 mb-2"
-            >
-              <div className="h-2 w-10 bg-[#FF3D00] border-2 border-black" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black">
-                Dashboard
-              </span>
-            </motion.div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4">
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <motion.div 
+                  whileHover={{ rotate: 15, scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="flex items-center justify-center size-12 bg-[#FFE600] border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] shrink-0 cursor-pointer"
+                >
+                  <Zap className="size-6 text-black" strokeWidth={3} />
+                </motion.div>
                 <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black leading-[1.1]">
                   Your <span className="text-[#2979FF] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Hackathons</span>
                 </h1>
@@ -182,6 +190,12 @@ export function DashboardClient({
                           className="inline-flex items-center justify-center bg-white px-3 py-2 text-sm font-bold text-black border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
                         >
                           <Edit2 className="size-4" strokeWidth={3} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(hackathon._id)}
+                          className="inline-flex items-center justify-center bg-[#FF3B30] text-white px-3 py-2 text-sm font-bold border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+                        >
+                          <Trash2 className="size-4" strokeWidth={3} />
                         </button>
                         <Link 
                           href={`/hackathon/${hackathon._id}`}
