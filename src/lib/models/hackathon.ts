@@ -6,6 +6,7 @@ export interface IHackathon extends Document {
   location: string;
   lastRegistrationDate: Date;
   nextRoundResultDate: Date;
+  nextStep?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -16,6 +17,7 @@ const HackathonSchema = new Schema<IHackathon>(
     location: { type: String, required: true },
     lastRegistrationDate: { type: Date, required: true },
     nextRoundResultDate: { type: Date, required: true },
+    nextStep: { type: String, default: "" },
   },
   {
     timestamps: true,

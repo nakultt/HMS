@@ -23,6 +23,7 @@ export function HackathonForm({
     nextRoundResultDate: initialData?.nextRoundResultDate
       ? new Date(initialData.nextRoundResultDate).toISOString().split("T")[0]
       : "",
+    nextStep: initialData?.nextStep || "",
   });
 
   const defaultLocations = ["Chennai", "Coimbatore", "Bengaluru", "Erode"];
@@ -37,6 +38,7 @@ export function HackathonForm({
         location: formData.location,
         lastRegistrationDate: new Date(formData.lastRegistrationDate),
         nextRoundResultDate: new Date(formData.nextRoundResultDate),
+        nextStep: formData.nextStep,
       };
 
       if (initialData?._id) {
@@ -120,6 +122,17 @@ export function HackathonForm({
                 className="w-full border-2 border-black p-2.5 text-black font-medium focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow"
               />
             </div>
+          </div>
+          
+          <div className="space-y-1.5">
+            <label className="text-sm font-black text-black">Next Step / Action</label>
+            <input
+              type="text"
+              value={formData.nextStep}
+              onChange={(e) => setFormData({ ...formData, nextStep: e.target.value })}
+              className="w-full border-2 border-black p-2.5 text-black font-medium focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow"
+              placeholder="e.g. Build MVP, Submit Pitch Deck..."
+            />
           </div>
           
           <div className="pt-4">

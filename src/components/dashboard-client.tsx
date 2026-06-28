@@ -23,6 +23,7 @@ interface Hackathon {
   location: string;
   lastRegistrationDate: string;
   nextRoundResultDate: string;
+  nextStep?: string;
 }
 
 function formatDate(dateStr: string) {
@@ -126,6 +127,7 @@ export function DashboardClient({
                 <TableHead className="font-black text-black">Reg Status</TableHead>
                 <TableHead className="font-black text-black">Reg Date</TableHead>
                 <TableHead className="font-black text-black">Result Date</TableHead>
+                <TableHead className="font-black text-black">Next Step</TableHead>
                 <TableHead className="font-black text-black">My Status</TableHead>
                 <TableHead className="text-right font-black text-black">Action</TableHead>
               </TableRow>
@@ -168,6 +170,11 @@ export function DashboardClient({
                         <Trophy className="size-3.5" />
                         <span className="font-bold">{formatDate(hackathon.nextRoundResultDate)}</span>
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-sm font-bold text-black block min-w-[150px] max-w-[250px] break-words">
+                        {hackathon.nextStep || "-"}
+                      </span>
                     </TableCell>
                     <TableCell>
                       {status ? (
