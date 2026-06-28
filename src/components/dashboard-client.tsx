@@ -60,29 +60,27 @@ export function DashboardClient({
               transition={{ delay: 0.2 }}
               className="flex items-center gap-2 mb-2"
             >
-             
-             
+              <div className="h-2 w-10 bg-[#FF3D00] border-2 border-black" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black">
+                Dashboard
+              </span>
             </motion.div>
-            
-            
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black leading-[1.1]">
+                Your <span className="text-[#2979FF] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Hackathons</span>
+              </h1>
+              {hackathons.length > 0 && (
+                <div className=" ml-5 inline-flex items-center gap-2 px-4 py-2 bg-white rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-2 sm:mt-0">
+                  <Rocket className="size-4 text-black" strokeWidth={2.5} />
+                  <span className="text-sm font-bold text-black">{hackathons.length} Hackathons</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Stats Bar */}
-      {hackathons.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="flex flex-wrap gap-3 mb-8"
-        >
-          <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg border border-border shadow-sm">
-            <Rocket className="size-4 text-blue-500" strokeWidth={2.5} />
-            <span className="text-sm font-bold text-foreground">{hackathons.length} Hackathons</span>
-          </div>
-        </motion.div>
-      )}
+
 
       {/* Table View */}
       {hackathons.length > 0 ? (
@@ -90,18 +88,18 @@ export function DashboardClient({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="rounded-xl border border-border bg-card overflow-hidden shadow-sm"
+          className="bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none"
         >
           <Table>
-            <TableHeader className="bg-secondary/50">
+            <TableHeader className="bg-[#FFE600] border-b-2 border-black text-black">
               <TableRow className="hover:bg-transparent">
-                <TableHead className="w-[250px] font-semibold">Event Details</TableHead>
-                <TableHead className="font-semibold">Location</TableHead>
-                <TableHead className="font-semibold">Reg Status</TableHead>
-                <TableHead className="font-semibold">Reg Date</TableHead>
-                <TableHead className="font-semibold">Result Date</TableHead>
-                <TableHead className="font-semibold">My Status</TableHead>
-                <TableHead className="text-right font-semibold">Action</TableHead>
+                <TableHead className="w-[250px] font-black text-black">Event Details</TableHead>
+                <TableHead className="font-black text-black">Location</TableHead>
+                <TableHead className="font-black text-black">Reg Status</TableHead>
+                <TableHead className="font-black text-black">Reg Date</TableHead>
+                <TableHead className="font-black text-black">Result Date</TableHead>
+                <TableHead className="font-black text-black">My Status</TableHead>
+                <TableHead className="text-right font-black text-black">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -110,54 +108,55 @@ export function DashboardClient({
                 const status = myStatuses[hackathon._id];
                 
                 return (
-                  <TableRow key={hackathon._id} className="group hover:bg-secondary/20 transition-colors">
+                  <TableRow key={hackathon._id} className="group hover:bg-[#FFE600]/10 transition-colors border-b border-black">
                     <TableCell className="py-4">
                       <div className="flex flex-col gap-1">
-                        <span className="font-bold text-base">{hackathon.name}</span>
+                        <span className="font-black text-base text-black">{hackathon.name}</span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1.5 text-sm text-black font-bold">
                         <MapPin className="size-3.5" />
                         {hackathon.location}
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge 
-                        variant="outline" 
-                        className={regOpen ? "bg-green-500/10 text-green-500 border-green-500/20" : "bg-red-500/10 text-red-500 border-red-500/20"}
+                      <span
+                        className={`inline-block px-2.5 py-1 text-xs font-black uppercase tracking-wider border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
+                          regOpen ? "bg-[#00C853] text-black" : "bg-[#FF3B30] text-white"
+                        }`}
                       >
                         {regOpen ? "Open" : "Closed"}
-                      </Badge>
+                      </span>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2 text-sm">
-                        <CalendarClock className="size-3.5 text-muted-foreground" />
-                        <span className="font-medium">{formatDate(hackathon.lastRegistrationDate)}</span>
+                      <div className="flex items-center gap-2 text-sm text-black">
+                        <CalendarClock className="size-3.5" />
+                        <span className="font-bold">{formatDate(hackathon.lastRegistrationDate)}</span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Trophy className="size-3.5 text-muted-foreground" />
-                        <span className="font-medium">{formatDate(hackathon.nextRoundResultDate)}</span>
+                      <div className="flex items-center gap-2 text-sm text-black">
+                        <Trophy className="size-3.5" />
+                        <span className="font-bold">{formatDate(hackathon.nextRoundResultDate)}</span>
                       </div>
                     </TableCell>
                     <TableCell>
                       {status ? (
-                        <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
+                        <span className="inline-block px-2.5 py-1 text-xs font-black uppercase tracking-wider bg-[#2979FF] text-white border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                           {status}
-                        </Badge>
+                        </span>
                       ) : (
-                        <span className="text-sm font-medium text-muted-foreground">Not Applied</span>
+                        <span className="text-sm font-black text-black/50">Not Applied</span>
                       )}
                     </TableCell>
                     <TableCell className="text-right">
                       <Link 
                         href={`/hackathon/${hackathon._id}`}
-                        className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors gap-2 group-hover:shadow-md"
+                        className="inline-flex items-center justify-center bg-black px-4 py-2 text-sm font-bold uppercase tracking-wide text-white border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all gap-2 group-hover:bg-[#FF3D00]"
                       >
                         View
-                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                        <ArrowRight className="size-4" />
                       </Link>
                     </TableCell>
                   </TableRow>
@@ -170,15 +169,15 @@ export function DashboardClient({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-xl bg-secondary/20"
+          className="flex flex-col items-center justify-center py-20 border-2 border-black rounded-none bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
         >
-          <div className="flex items-center justify-center size-16 rounded-full bg-blue-500/10 text-blue-500 mb-6">
+          <div className="flex items-center justify-center size-16 bg-[#FFE600] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black mb-6">
             <Rocket className="size-8" strokeWidth={2} />
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-foreground mb-2">
+          <h2 className="text-2xl font-black tracking-tight text-black mb-2">
             No Hackathons Yet
           </h2>
-          <p className="text-sm text-muted-foreground font-medium mb-6 text-center max-w-sm">
+          <p className="text-sm text-black font-bold mb-6 text-center max-w-sm">
             You don't have any hackathons tracked in the database.
           </p>
         </motion.div>
