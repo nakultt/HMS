@@ -31,12 +31,6 @@ export function Navbar() {
           </div>
         </Link>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-1 px-3 py-1.5 bg-[#00C853] border-2 border-black text-xs font-bold uppercase tracking-wider">
-            <span className="size-2 bg-black rounded-full animate-pulse" />
-            Live
-          </div>
-        </div>
       </div>
     </motion.nav>
   );

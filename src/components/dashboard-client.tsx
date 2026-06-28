@@ -1,13 +1,18 @@
 "use client";
 
-import { useTransition } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { HackathonCard } from "@/components/hackathon-card";
-import { Button } from "@/components/ui/button";
-import { seedDatabase } from "@/app/actions/seed";
-import { Zap, Database, Rocket } from "lucide-react";
-import { toast } from "sonner";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Zap, Rocket, MapPin, CalendarClock, Trophy, ArrowRight } from "lucide-react";
 
 interface Hackathon {
   _id: string;
@@ -17,29 +22,26 @@ interface Hackathon {
   nextRoundResultDate: string;
 }
 
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function isRegistrationOpen(dateStr: string) {
+  return new Date(dateStr) > new Date();
+}
+
 export function DashboardClient({
   hackathons,
-  teamCounts,
+  myStatuses,
 }: {
   hackathons: Hackathon[];
-  teamCounts: Record<string, number>;
+  myStatuses: Record<string, string | null>;
 }) {
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
-  const handleSeed = () => {
-    startTransition(async () => {
-      try {
-        const result = await seedDatabase();
-        toast.success("Database seeded!", {
-          description: `Created ${result.hackathonsCreated} hackathons and ${result.teamsCreated} teams`,
-        });
-        router.refresh();
-      } catch {
-        toast.error("Failed to seed database");
-      }
-    });
-  };
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
@@ -58,44 +60,12 @@ export function DashboardClient({
               transition={{ delay: 0.2 }}
               className="flex items-center gap-2 mb-2"
             >
-              <div className="h-1 w-8 bg-[#FFE600]" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-black/40">
-                Dashboard
-              </span>
+             
+             
             </motion.div>
-            <h1 className="text-4xl sm:text-5xl font-black uppercase tracking-tighter text-black leading-[0.9]">
-              Your
-              <br />
-              <span className="relative inline-block">
-                Hackathons
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
-                  className="absolute -bottom-1 left-0 right-0 h-3 bg-[#FFE600] -z-10 origin-left"
-                />
-              </span>
-            </h1>
-            <p className="mt-3 text-sm font-medium text-black/50 max-w-md">
-              Manage hackathon submissions, track team progress, and organize judging rounds.
-            </p>
+            
+            
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Button
-              variant="accent"
-              onClick={handleSeed}
-              disabled={isPending}
-              className="flex items-center gap-2"
-            >
-              <Database className="size-4" strokeWidth={2.5} />
-              {isPending ? "Seeding..." : "Seed Database"}
-            </Button>
-          </motion.div>
         </div>
       </motion.div>
 
@@ -107,55 +77,110 @@ export function DashboardClient({
           transition={{ delay: 0.3 }}
           className="flex flex-wrap gap-3 mb-8"
         >
-          <div className="flex items-center gap-2 px-4 py-2 bg-[#FFE600] border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-            <Rocket className="size-4" strokeWidth={2.5} />
-            <span className="text-sm font-black">{hackathons.length} Events</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-[#2979FF] text-white border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
-            <Zap className="size-4" strokeWidth={2.5} />
-            <span className="text-sm font-black">
-              {Object.values(teamCounts).reduce((a, b) => a + b, 0)} Total Teams
-            </span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg border border-border shadow-sm">
+            <Rocket className="size-4 text-blue-500" strokeWidth={2.5} />
+            <span className="text-sm font-bold text-foreground">{hackathons.length} Hackathons</span>
           </div>
         </motion.div>
       )}
 
-      {/* Cards Grid */}
+      {/* Table View */}
       {hackathons.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {hackathons.map((hackathon, index) => (
-            <HackathonCard
-              key={hackathon._id}
-              hackathon={hackathon}
-              index={index}
-              teamCount={teamCounts[hackathon._id] || 0}
-            />
-          ))}
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="rounded-xl border border-border bg-card overflow-hidden shadow-sm"
+        >
+          <Table>
+            <TableHeader className="bg-secondary/50">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="w-[250px] font-semibold">Event Details</TableHead>
+                <TableHead className="font-semibold">Location</TableHead>
+                <TableHead className="font-semibold">Reg Status</TableHead>
+                <TableHead className="font-semibold">Reg Date</TableHead>
+                <TableHead className="font-semibold">Result Date</TableHead>
+                <TableHead className="font-semibold">My Status</TableHead>
+                <TableHead className="text-right font-semibold">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {hackathons.map((hackathon) => {
+                const regOpen = isRegistrationOpen(hackathon.lastRegistrationDate);
+                const status = myStatuses[hackathon._id];
+                
+                return (
+                  <TableRow key={hackathon._id} className="group hover:bg-secondary/20 transition-colors">
+                    <TableCell className="py-4">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-bold text-base">{hackathon.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                        <MapPin className="size-3.5" />
+                        {hackathon.location}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant="outline" 
+                        className={regOpen ? "bg-green-500/10 text-green-500 border-green-500/20" : "bg-red-500/10 text-red-500 border-red-500/20"}
+                      >
+                        {regOpen ? "Open" : "Closed"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2 text-sm">
+                        <CalendarClock className="size-3.5 text-muted-foreground" />
+                        <span className="font-medium">{formatDate(hackathon.lastRegistrationDate)}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Trophy className="size-3.5 text-muted-foreground" />
+                        <span className="font-medium">{formatDate(hackathon.nextRoundResultDate)}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {status ? (
+                        <Badge variant="outline" className="bg-blue-500/10 text-blue-500 border-blue-500/20">
+                          {status}
+                        </Badge>
+                      ) : (
+                        <span className="text-sm font-medium text-muted-foreground">Not Applied</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Link 
+                        href={`/hackathon/${hackathon._id}`}
+                        className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors gap-2 group-hover:shadow-md"
+                      >
+                        View
+                        <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </motion.div>
       ) : (
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-black/20"
+          className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-xl bg-secondary/20"
         >
-          <div className="flex items-center justify-center size-16 bg-[#FFE600] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mb-6">
-            <Rocket className="size-8 text-black" strokeWidth={2} />
+          <div className="flex items-center justify-center size-16 rounded-full bg-blue-500/10 text-blue-500 mb-6">
+            <Rocket className="size-8" strokeWidth={2} />
           </div>
-          <h2 className="text-2xl font-black uppercase tracking-tight text-black mb-2">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground mb-2">
             No Hackathons Yet
           </h2>
-          <p className="text-sm text-black/50 font-medium mb-6 text-center max-w-sm">
-            Click the &ldquo;Seed Database&rdquo; button above to populate the system with sample hackathon data.
+          <p className="text-sm text-muted-foreground font-medium mb-6 text-center max-w-sm">
+            You don't have any hackathons tracked in the database.
           </p>
-          <Button
-            variant="accent"
-            size="lg"
-            onClick={handleSeed}
-            disabled={isPending}
-          >
-            <Database className="size-5" strokeWidth={2.5} />
-            {isPending ? "Seeding..." : "Get Started — Seed Now"}
-          </Button>
         </motion.div>
       )}
     </div>

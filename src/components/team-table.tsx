@@ -55,10 +55,10 @@ const columns = [
   columnHelper.accessor("teamName", {
     header: ({ column }) => (
       <button
-        className="flex items-center gap-1.5 hover:text-[#2979FF] transition-colors"
+        className="flex items-center gap-1.5 hover:text-blue-500 transition-colors"
         onClick={() => column.toggleSorting()}
       >
-        Team Name
+        Project / Team Name
         <ArrowUpDown className="size-3" strokeWidth={2.5} />
       </button>
     ),
@@ -71,17 +71,17 @@ const columns = [
     header: "Lead Contact",
     cell: (info) => (
       <div className="flex items-center gap-2">
-        <div className="flex items-center justify-center size-6 bg-black text-white text-[10px] font-black shrink-0">
+        <div className="flex items-center justify-center size-6 bg-primary text-primary-foreground rounded-full text-[10px] font-black shrink-0">
           {(info.getValue() as string).charAt(0)}
         </div>
-        <span className="font-medium text-black/80">{info.getValue() as string}</span>
+        <span className="font-medium text-muted-foreground">{info.getValue() as string}</span>
       </div>
     ),
   }),
   columnHelper.accessor("status", {
     header: ({ column }) => (
       <button
-        className="flex items-center gap-1.5 hover:text-[#2979FF] transition-colors"
+        className="flex items-center gap-1.5 hover:text-blue-500 transition-colors"
         onClick={() => column.toggleSorting()}
       >
         Status
@@ -139,18 +139,18 @@ export function TeamTable({
       {/* Search & Stats Bar */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="relative w-full sm:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-black/40" strokeWidth={2.5} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search teams..."
+            placeholder="Search submissions..."
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            className="w-full h-10 pl-10 pr-4 border-2 border-black bg-white text-sm font-bold text-black placeholder:text-black/30 placeholder:font-medium shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus:translate-x-[2px] focus:translate-y-[2px] outline-none transition-all duration-150"
+            className="w-full h-10 pl-10 pr-4 border border-border bg-background rounded-md text-sm font-medium text-foreground placeholder:text-muted-foreground outline-none transition-all duration-150 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
           />
         </div>
-        <div className="flex items-center gap-2 text-xs font-bold text-black/50">
-          <Users className="size-3.5" strokeWidth={2.5} />
-          {table.getFilteredRowModel().rows.length} of {teams.length} teams
+        <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+          <Users className="size-3.5" />
+          {table.getFilteredRowModel().rows.length} of {teams.length} submissions
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export function TeamTable({
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.03, duration: 0.3 }}
-                className="border-b border-black/10 transition-colors hover:bg-[#FFE600]/5 cursor-pointer group"
+                className="border-b border-border transition-colors hover:bg-secondary/20 cursor-pointer group"
                 onClick={() => handleOpenSheet(row.original)}
               >
                 {row.getVisibleCells().map((cell) => {
@@ -211,9 +211,9 @@ export function TeamTable({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-32 text-center">
-                <div className="flex flex-col items-center gap-2 text-black/40">
-                  <Users className="size-8" strokeWidth={1.5} />
-                  <span className="font-bold">No teams found</span>
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <Users className="size-8" />
+                  <span className="font-semibold">No submissions found</span>
                 </div>
               </TableCell>
             </TableRow>
