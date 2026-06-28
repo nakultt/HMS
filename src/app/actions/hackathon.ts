@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { connectDB } from "@/lib/db";
 import { Hackathon } from "@/lib/models/hackathon";
 
@@ -14,4 +16,25 @@ export async function getHackathonById(id: string) {
   const hackathon = await Hackathon.findById(id).lean();
   if (!hackathon) return null;
   return JSON.parse(JSON.stringify(hackathon));
+}
+
+export async function createHackathon(data: any) {
+  await connectDB();
+  const hackathon = await Hackathon.create(data);
+  revalidatePath("/");
+  return JSON.parse(JSON.stringify(hackathon));
+}
+
+export async function updateHackathon(id: string, data: any) {
+  await connectDB();
+  const hackathon = await Hackathon.findByIdAndUpdate(id, data, { new: true });
+  revalidatePath("/");
+  revalidatePath(`/hackathon/${id}`);
+  return JSON.parse(JSON.stringify(hackathon));
+}
+
+export async function getUniqueLocations() {
+  await connectDB();
+  const locations = await Hackathon.distinct("location");
+  return locations;
 }

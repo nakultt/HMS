@@ -10,13 +10,26 @@ export async function getTeamsByHackathon(hackathonId: string) {
   return JSON.parse(JSON.stringify(teams));
 }
 
+export async function createTeam(data: any) {
+  await connectDB();
+  const team = await Team.create(data);
+  revalidatePath(`/hackathon/${team.hackathonId}`);
+  return JSON.parse(JSON.stringify(team));
+}
+
+export async function getUniqueTeamMembers() {
+  await connectDB();
+  const members = await Team.distinct("teamMembers.name");
+  return members;
+}
+
 export async function updateTeam(
   id: string,
   data: {
     teamName?: string;
     status?: string;
     projectIdea?: string;
-    teamMembers?: { name: string; role: string }[];
+    teamMembers?: { name: string }[];
   }
 ) {
   await connectDB();

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +11,10 @@ import {
   Trophy,
   FolderDot,
   Clock,
+  Plus,
+  Edit2
 } from "lucide-react";
+import { SubmissionForm } from "./submission-form";
 
 interface Hackathon {
   _id: string;
@@ -22,7 +26,6 @@ interface Hackathon {
 
 interface TeamMember {
   name: string;
-  role: string;
 }
 
 interface Team {
@@ -51,10 +54,13 @@ function getDaysRemaining(dateStr: string) {
 export function HackathonDetailClient({
   hackathon,
   initialTeams,
+  uniqueTeamMembers,
 }: {
   hackathon: Hackathon;
   initialTeams: Team[];
+  uniqueTeamMembers: string[];
 }) {
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const regDays = getDaysRemaining(hackathon.lastRegistrationDate);
   const resultDays = getDaysRemaining(hackathon.nextRoundResultDate);
 
@@ -147,17 +153,29 @@ export function HackathonDetailClient({
 
       </motion.div>
 
-      {/* Section Title */}
+      {/* Section Title & Button */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className="flex items-center gap-3 mb-6"
+        className="flex items-center justify-between mb-6 gap-4"
       >
-        <h2 className="text-xl font-black tracking-tight text-black">
-          Project Details
-        </h2>
-        <div className="flex-1 h-[2px] bg-black" />
+        <div className="flex items-center gap-3 flex-1">
+          <h2 className="text-xl font-black tracking-tight text-black">
+            Project Details
+          </h2>
+          <div className="flex-1 h-[2px] bg-black" />
+        </div>
+        <button
+          onClick={() => setIsFormOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#FFE600] text-black font-black uppercase tracking-wider border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+        >
+          {initialTeams.length > 0 ? (
+            <><Edit2 className="size-4" strokeWidth={3} /> Edit Submission</>
+          ) : (
+            <><Plus className="size-4" strokeWidth={3} /> Register</>
+          )}
+        </button>
       </motion.div>
 
       {/* Team Members List */}
@@ -196,6 +214,15 @@ export function HackathonDetailClient({
           </div>
         )}
       </motion.div>
+
+      {isFormOpen && (
+        <SubmissionForm
+          hackathonId={hackathon._id}
+          initialData={initialTeams.length > 0 ? initialTeams[0] : null}
+          uniqueTeamMembers={uniqueTeamMembers}
+          onClose={() => setIsFormOpen(false)}
+        />
+      )}
     </div>
   );
 }

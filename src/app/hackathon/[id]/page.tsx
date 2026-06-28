@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getHackathonById } from "@/app/actions/hackathon";
-import { getTeamsByHackathon } from "@/app/actions/team";
+import { getTeamsByHackathon, getUniqueTeamMembers } from "@/app/actions/team";
 import { HackathonDetailClient } from "@/components/hackathon-detail-client";
 
 export default async function HackathonDetailPage({
@@ -16,6 +16,7 @@ export default async function HackathonDetailPage({
   }
 
   const teams = await getTeamsByHackathon(id);
+  const uniqueTeamMembers = await getUniqueTeamMembers();
 
-  return <HackathonDetailClient hackathon={hackathon} initialTeams={teams} />;
+  return <HackathonDetailClient hackathon={hackathon} initialTeams={teams} uniqueTeamMembers={uniqueTeamMembers} />;
 }

@@ -1,4 +1,4 @@
-import { getHackathons } from "@/app/actions/hackathon";
+import { getHackathons, getUniqueLocations } from "@/app/actions/hackathon";
 import { getTeamsByHackathon } from "@/app/actions/team";
 import { DashboardClient } from "@/components/dashboard-client";
 
@@ -11,6 +11,7 @@ export default async function Home() {
     const teams = await getTeamsByHackathon(h._id);
     myStatuses[h._id] = teams.length > 0 ? teams[0].status : null;
   }
+  const uniqueLocations = await getUniqueLocations();
 
-  return <DashboardClient hackathons={hackathons} myStatuses={myStatuses} />;
+  return <DashboardClient hackathons={hackathons} myStatuses={myStatuses} uniqueLocations={uniqueLocations} />;
 }

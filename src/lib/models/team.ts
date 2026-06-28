@@ -2,7 +2,6 @@ import mongoose, { Schema, type Document } from "mongoose";
 
 export interface ITeamMember {
   name: string;
-  role: string;
 }
 
 export interface ITeam extends Document {
@@ -19,7 +18,6 @@ export interface ITeam extends Document {
 const TeamMemberSchema = new Schema<ITeamMember>(
   {
     name: { type: String, required: true },
-    role: { type: String, required: true },
   },
   { _id: false }
 );

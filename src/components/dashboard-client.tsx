@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -12,7 +13,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Zap, Rocket, MapPin, CalendarClock, Trophy, ArrowRight } from "lucide-react";
+import { Zap, Rocket, MapPin, CalendarClock, Trophy, ArrowRight, Plus, Edit2 } from "lucide-react";
+import { HackathonForm } from "./hackathon-form";
 
 interface Hackathon {
   _id: string;
@@ -37,11 +39,25 @@ function isRegistrationOpen(dateStr: string) {
 export function DashboardClient({
   hackathons,
   myStatuses,
+  uniqueLocations,
 }: {
   hackathons: Hackathon[];
   myStatuses: Record<string, string | null>;
+  uniqueLocations: string[];
 }) {
   const router = useRouter();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingHackathon, setEditingHackathon] = useState<Hackathon | null>(null);
+
+  const openNewForm = () => {
+    setEditingHackathon(null);
+    setIsFormOpen(true);
+  };
+
+  const openEditForm = (h: Hackathon) => {
+    setEditingHackathon(h);
+    setIsFormOpen(true);
+  };
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
@@ -65,16 +81,25 @@ export function DashboardClient({
                 Dashboard
               </span>
             </motion.div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black leading-[1.1]">
-                Your <span className="text-[#2979FF] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Hackathons</span>
-              </h1>
-              {hackathons.length > 0 && (
-                <div className=" ml-5 inline-flex items-center gap-2 px-4 py-2 bg-white rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-2 sm:mt-0">
-                  <Rocket className="size-4 text-black" strokeWidth={2.5} />
-                  <span className="text-sm font-bold text-black">{hackathons.length} Hackathons</span>
-                </div>
-              )}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black leading-[1.1]">
+                  Your <span className="text-[#2979FF] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Hackathons</span>
+                </h1>
+                {hackathons.length > 0 && (
+                  <div className="ml-5 inline-flex h-12 items-center justify-center gap-2 px-6 bg-white rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-2 sm:mt-0">
+                    <Rocket className="size-5 text-black" strokeWidth={2.5} />
+                    <span className="text-sm font-black uppercase tracking-wider text-black">{hackathons.length} Hackathons</span>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={openNewForm}
+                className="inline-flex h-12 items-center justify-center gap-2 px-6 bg-[#00C853] text-black font-black uppercase tracking-wider border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
+              >
+                <Plus className="size-5" strokeWidth={3} />
+                New Hackathon
+              </button>
             </div>
           </div>
         </div>
@@ -151,13 +176,21 @@ export function DashboardClient({
                       )}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Link 
-                        href={`/hackathon/${hackathon._id}`}
-                        className="inline-flex items-center justify-center bg-black px-4 py-2 text-sm font-bold uppercase tracking-wide text-white border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all gap-2 group-hover:bg-[#FF3D00]"
-                      >
-                        View
-                        <ArrowRight className="size-4" />
-                      </Link>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => openEditForm(hackathon)}
+                          className="inline-flex items-center justify-center bg-white px-3 py-2 text-sm font-bold text-black border-2 border-black rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+                        >
+                          <Edit2 className="size-4" strokeWidth={3} />
+                        </button>
+                        <Link 
+                          href={`/hackathon/${hackathon._id}`}
+                          className="inline-flex items-center justify-center bg-black px-4 py-2 text-sm font-bold uppercase tracking-wide text-white border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all gap-2 group-hover:bg-[#FF3D00]"
+                        >
+                          View
+                          <ArrowRight className="size-4" />
+                        </Link>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );
@@ -181,6 +214,14 @@ export function DashboardClient({
             You don't have any hackathons tracked in the database.
           </p>
         </motion.div>
+      )}
+
+      {isFormOpen && (
+        <HackathonForm
+          initialData={editingHackathon}
+          uniqueLocations={uniqueLocations}
+          onClose={() => setIsFormOpen(false)}
+        />
       )}
     </div>
   );
