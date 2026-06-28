@@ -80,36 +80,32 @@ export function DashboardClient({
         transition={{ duration: 0.5 }}
         className="mb-10"
       >
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-          <div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                <motion.div 
-                  whileHover={{ rotate: 15, scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="flex items-center justify-center size-12 bg-[#FFE600] border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] shrink-0 cursor-pointer"
-                >
-                  <Zap className="size-6 text-black" strokeWidth={3} />
-                </motion.div>
-                <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black leading-[1.1]">
-                  Your <span className="text-[#2979FF] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Hackathons</span>
-                </h1>
-                {hackathons.length > 0 && (
-                  <div className="ml-5 inline-flex h-12 items-center justify-center gap-2 px-6 bg-white rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-2 sm:mt-0">
-                    <Rocket className="size-5 text-black" strokeWidth={2.5} />
-                    <span className="text-sm font-black uppercase tracking-wider text-black">{hackathons.length} Hackathons</span>
-                  </div>
-                )}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between w-full gap-6">
+          <div className="flex flex-wrap items-center gap-4">
+            <motion.div 
+              whileHover={{ rotate: 15, scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              className="flex items-center justify-center size-12 bg-[#FFE600] border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] shrink-0 cursor-pointer"
+            >
+              <Zap className="size-6 text-black" strokeWidth={3} />
+            </motion.div>
+            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black leading-[1.1]">
+              Your <span className="text-[#2979FF] drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">Hackathons</span>
+            </h1>
+            {hackathons.length > 0 && (
+              <div className="inline-flex h-12 items-center justify-center gap-2 px-6 bg-white rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <Rocket className="size-5 text-black" strokeWidth={2.5} />
+                <span className="text-sm font-black uppercase tracking-wider text-black">{hackathons.length} Hackathons</span>
               </div>
-              <button
-                onClick={openNewForm}
-                className="inline-flex h-12 items-center justify-center gap-2 px-6 bg-[#00C853] text-black font-black uppercase tracking-wider border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
-              >
-                <Plus className="size-5" strokeWidth={3} />
-                New Hackathon
-              </button>
-            </div>
+            )}
           </div>
+          <button
+            onClick={openNewForm}
+            className="w-full lg:w-auto inline-flex h-12 items-center justify-center gap-2 px-6 bg-[#00C853] text-black font-black uppercase tracking-wider border-2 border-black rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
+          >
+            <Plus className="size-5" strokeWidth={3} />
+            New Hackathon
+          </button>
         </div>
       </motion.div>
 
@@ -120,10 +116,9 @@ export function DashboardClient({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none"
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <Table>
+          <Table className="bg-white">
             <TableHeader className="bg-[#FFE600] border-b-2 border-black text-black">
               <TableRow className="hover:bg-transparent">
                 <TableHead className="w-[250px] font-black text-black">Event Details</TableHead>
