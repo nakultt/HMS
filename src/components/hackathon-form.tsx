@@ -24,6 +24,7 @@ export function HackathonForm({
       ? new Date(initialData.nextRoundResultDate).toISOString().split("T")[0]
       : "",
     nextStep: initialData?.nextStep || "",
+    eventLink: initialData?.eventLink || "",
   });
 
   const defaultLocations = ["Chennai", "Coimbatore", "Bengaluru", "Erode"];
@@ -39,6 +40,7 @@ export function HackathonForm({
         lastRegistrationDate: new Date(formData.lastRegistrationDate),
         nextRoundResultDate: new Date(formData.nextRoundResultDate),
         nextStep: formData.nextStep,
+        eventLink: formData.eventLink,
       };
 
       if (initialData?._id) {
@@ -132,6 +134,17 @@ export function HackathonForm({
               onChange={(e) => setFormData({ ...formData, nextStep: e.target.value })}
               className="w-full border-2 border-black p-2.5 text-black font-medium focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow"
               placeholder="e.g. Build MVP, Submit Pitch Deck..."
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-sm font-black text-black">Event Link</label>
+            <input
+              type="url"
+              value={formData.eventLink}
+              onChange={(e) => setFormData({ ...formData, eventLink: e.target.value })}
+              className="w-full border-2 border-black p-2.5 text-black font-medium focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow"
+              placeholder="https://hackathon.devfolio.co"
             />
           </div>
           

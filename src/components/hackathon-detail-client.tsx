@@ -23,6 +23,7 @@ interface Hackathon {
   location: string;
   lastRegistrationDate: string;
   nextRoundResultDate: string;
+  eventLink?: string;
 }
 
 interface TeamMember {
@@ -117,6 +118,19 @@ export function HackathonDetailClient({
                 <MapPin className="size-4" />
                 {hackathon.location}
               </span>
+              {hackathon.eventLink && (
+                <>
+                  <span className="text-black/20">•</span>
+                  <a
+                    href={hackathon.eventLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-1.5 text-[#2979FF] hover:underline"
+                  >
+                    View Event Page
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>

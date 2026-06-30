@@ -21,9 +21,9 @@ interface Hackathon {
   _id: string;
   name: string;
   location: string;
-  lastRegistrationDate: string;
   nextRoundResultDate: string;
   nextStep?: string;
+  eventLink?: string;
 }
 
 function formatDate(dateStr: string) {
@@ -141,7 +141,15 @@ export function DashboardClient({
                   <TableRow key={hackathon._id} className="group hover:bg-[#FFE600]/10 transition-colors border-b border-black">
                     <TableCell className="py-4">
                       <div className="flex flex-col gap-1">
-                        <span className="font-black text-base text-black">{hackathon.name}</span>
+                        <span className="font-black text-base text-black">
+                          {hackathon.eventLink ? (
+                            <a href={hackathon.eventLink} target="_blank" rel="noreferrer" className="hover:underline hover:text-[#2979FF] transition-colors">
+                              {hackathon.name}
+                            </a>
+                          ) : (
+                            hackathon.name
+                          )}
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell>
